@@ -1,70 +1,141 @@
-# Getting Started with Create React App
+Overview
+This is a full-stack Sweet Shop Management System built with a RESTful backend API and a modern single-page frontend application. The system allows users to browse, search, and purchase sweets, while admin users can manage the inventory.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Features
+Backend API
+User authentication (register/login) with JWT
 
-## Available Scripts
+Sweet management (CRUD operations)
 
-In the project directory, you can run:
+Inventory management (purchase/restock)
 
-### `npm start`
+Search functionality
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Frontend Application
+User registration and login
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Sweet catalog browsing
 
-### `npm test`
+Search and filter functionality
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Purchase system with inventory validation
 
-### `npm run build`
+Admin dashboard for inventory management
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Technologies Used
+Backend
+Node.js with Express
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+PostgreSQL database
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+JWT for authentication
 
-### `npm run eject`
+Frontend
+React.js
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Tailwind CSS for styling
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Axios for API calls
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Setup Instructions
+Prerequisites
+Node.js (v18 or higher)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+PostgreSQL (v12 or higher)
 
-## Learn More
+npm or yarn
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Backend Setup
+Clone the repository
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Navigate to the backend directory: cd backend
 
-### Code Splitting
+Install dependencies: npm install
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Create a .env file based on .env.example
 
-### Analyzing the Bundle Size
+Set up your PostgreSQL database and update the connection string in .env
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Run migrations: npm run migrate
 
-### Making a Progressive Web App
+Start the server: npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Frontend Setup
+Navigate to the frontend directory: cd frontend
 
-### Advanced Configuration
+Install dependencies: npm install
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Start the development server: npm run dev
 
-### Deployment
+API Endpoints
+Auth
+POST /api/auth/register - Register a new user
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+POST /api/auth/login - Login an existing user
 
-### `npm run build` fails to minify
+Sweets (Protected)
+POST /api/sweets - Add a new sweet (Admin only)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+GET /api/sweets - Get all sweets
+
+GET /api/sweets/search - Search sweets
+
+PUT /api/sweets/:id - Update a sweet (Admin only)
+
+DELETE /api/sweets/:id - Delete a sweet (Admin only)
+
+Inventory (Protected)
+POST /api/sweets/:id/purchase - Purchase a sweet
+
+POST /api/sweets/:id/restock - Restock a sweet (Admin only)
+
+Screenshots
+https:///screenshots/login.png
+https:///screenshots/catalog.png
+https:///screenshots/admin.png
+
+My AI Usage
+AI Tools Used
+GitHub Copilot
+
+ChatGPT
+
+Claude AI
+
+How AI Was Used
+GitHub Copilot:
+
+Used extensively for boilerplate code generation
+
+Helped with React component scaffolding
+
+Assisted with repetitive code patterns in both frontend and backend
+
+ChatGPT:
+
+Brainstormed API endpoint structures
+
+Generated initial test cases for TDD approach
+
+Helped debug complex React state management issues
+
+Claude AI:
+
+Assisted with database schema design
+
+Provided suggestions for error handling patterns
+
+Helped optimize SQL queries
+
+Impact on Workflow
+The AI tools significantly accelerated the development process, particularly in:
+
+Reducing time spent on boilerplate code
+
+Providing instant feedback on code structure
+
+Offering alternative solutions to problems
+
+Generating comprehensive test cases
+
+However, all AI-generated code was carefully reviewed and modified to fit the specific requirements of the project. The AI acted as an assistant rather than a replacement for critical thinking and problem-solving.
