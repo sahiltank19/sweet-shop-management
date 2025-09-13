@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // Add associations here if needed
+      User.hasOne(models.Student, { foreignKey: 'userId', as: 'student' });
     }
 
     async comparePassword(candidatePassword) {
@@ -38,6 +38,18 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'Username must be between 3-30 characters'
         }
       }
+    },
+    first_name: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    last_name: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    contact_number: {
+      type: DataTypes.STRING(20),
+      allowNull: true
     },
     email: {
       type: DataTypes.STRING,

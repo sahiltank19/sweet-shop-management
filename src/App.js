@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import EditProfile from './pages/EditProfile';
 import PrivateRoute from './components/PrivateRoute';
 
 // Create a theme instance
@@ -50,6 +51,14 @@ function App() {
             element={
               <PrivateRoute adminOnly={true}>
                 <AdminDashboard />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              <PrivateRoute>
+                <EditProfile />
               </PrivateRoute>
             } 
           />

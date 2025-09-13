@@ -6,24 +6,36 @@ import {
   TextField, 
   Button, 
   Box,
-  Link
+  Link,
+  Grid,
+  MenuItem
 } from '@mui/material';
-import auth from '../services/auth';
+import students from '../services/students';
 
 function Register() {
   const [formData, setFormData] = useState({
-    username: '',
+    firstName: '',
+    lastName: '',
     email: '',
+    contactNumber: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    rollNumber: '',
+    course: '',
+    track: ''
   });
   
   // Initialize errors state
   const [errors, setErrors] = useState({
-    username: '',
+    firstName: '',
+    lastName: '',
     email: '',
+    contactNumber: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    rollNumber: '',
+    course: '',
+    track: ''
   });
   
   const [apiError, setApiError] = useState('');
@@ -47,14 +59,23 @@ function Register() {
   const validateForm = () => {
     let valid = true;
     const newErrors = {
-      username: '',
+      firstName: '',
+      lastName: '',
       email: '',
+      contactNumber: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      rollNumber: '',
+      course: '',
+      track: ''
     };
 
-    if (!formData.username.trim()) {
-      newErrors.username = 'Username is required';
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'First name is required';
+      valid = false;
+    }
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'Last name is required';
       valid = false;
     }
 
@@ -66,11 +87,30 @@ function Register() {
       valid = false;
     }
 
+    if (formData.contactNumber && !/^\+?[0-9\-\s]{7,15}$/.test(formData.contactNumber)) {
+      newErrors.contactNumber = 'Invalid contact number';
+      valid = false;
+    }
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
       valid = false;
     } else if (formData.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters';
+      valid = false;
+    }
+
+    if (!formData.rollNumber.trim()) {
+      newErrors.rollNumber = 'Roll number is required';
+      valid = false;
+    }
+
+    if (!formData.course) {
+      newErrors.course = 'Course is required';
+      valid = false;
+    }
+    if (formData.course === 'MSc.CS' && !formData.track) {
+      newErrors.track = 'Track is required for MSc.CS';
       valid = false;
     }
 
@@ -92,7 +132,16 @@ function Register() {
     }
 
     try {
-      await auth.register(formData);
+      await students.register({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        contactNumber: formData.contactNumber,
+        email: formData.email,
+        password: formData.password,
+        rollNumber: formData.rollNumber,
+        course: formData.course,
+        track: formData.course === 'MSc.CS' ? formData.track : ''
+      });
       navigate('/login');
     } catch (error) {
       setApiError(error.message || 'Registration failed. Please try again.');
@@ -100,7 +149,7 @@ function Register() {
   };
 
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="sm">
       <Box sx={{ 
         marginTop: 8,
         display: 'flex',
@@ -108,7 +157,7 @@ function Register() {
         alignItems: 'center',
       }}>
         <Typography component="h1" variant="h5">
-          Sign up
+          Student Registration
         </Typography>
         
         {apiError && (
@@ -117,72 +166,53 @@ function Register() {
           </Typography>
         )}
 
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
-            autoFocus
-            value={formData.username}
-            onChange={handleChange}
-            error={!!errors.username}
-            helperText={errors.username}
-          />
-          
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            value={formData.email}
-            onChange={handleChange}
-            error={!!errors.email}
-            helperText={errors.email}
-          />
-          
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="new-password"
-            value={formData.password}
-            onChange={handleChange}
-            error={!!errors.password}
-            helperText={errors.password}
-          />
-          
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="confirmPassword"
-            label="Confirm Password"
-            type="password"
-            id="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            error={!!errors.confirmPassword}
-            helperText={errors.confirmPassword}
-          />
-          
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign Up
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Typography variant="subtitle1">Personal Information</Typography>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid item xs={12} sm={6}>
+              <TextField required fullWidth id="firstName" label="First Name" name="firstName" autoFocus value={formData.firstName} onChange={handleChange} error={!!errors.firstName} helperText={errors.firstName} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField required fullWidth id="lastName" label="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} error={!!errors.lastName} helperText={errors.lastName} />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email" value={formData.email} onChange={handleChange} error={!!errors.email} helperText={errors.email} />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField fullWidth id="contactNumber" label="Contact Number" name="contactNumber" value={formData.contactNumber} onChange={handleChange} error={!!errors.contactNumber} helperText={errors.contactNumber} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField required fullWidth name="password" label="Password" type="password" id="password" autoComplete="new-password" value={formData.password} onChange={handleChange} error={!!errors.password} helperText={errors.password} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField required fullWidth name="confirmPassword" label="Confirm Password" type="password" id="confirmPassword" value={formData.confirmPassword} onChange={handleChange} error={!!errors.confirmPassword} helperText={errors.confirmPassword} />
+            </Grid>
+          </Grid>
+
+          <Typography variant="subtitle1" sx={{ mt: 3 }}>Academic Information</Typography>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid item xs={12} sm={6}>
+              <TextField required fullWidth id="rollNumber" label="Roll Number" name="rollNumber" value={formData.rollNumber} onChange={handleChange} error={!!errors.rollNumber} helperText={errors.rollNumber} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField required select fullWidth id="course" label="Course" name="course" value={formData.course} onChange={handleChange} error={!!errors.course} helperText={errors.course} >
+                <MenuItem value="MSc.CS">MSc.CS</MenuItem>
+                <MenuItem value="MSc.AIML">MSc.AIML</MenuItem>
+                <MenuItem value="MCA">MCA</MenuItem>
+              </TextField>
+            </Grid>
+            {formData.course === 'MSc.CS' && (
+              <Grid item xs={12}>
+                <TextField select fullWidth id="track" label="Track" name="track" value={formData.track} onChange={handleChange} error={!!errors.track} helperText={errors.track} >
+                  <MenuItem value="Web Technologies">Web Technologies</MenuItem>
+                  <MenuItem value="AI & ML">AI & ML</MenuItem>
+                </TextField>
+              </Grid>
+            )}
+          </Grid>
+
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            Register
           </Button>
           
           <Box sx={{ textAlign: 'center' }}>
