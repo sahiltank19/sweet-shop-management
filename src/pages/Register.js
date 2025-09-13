@@ -9,21 +9,33 @@ import {
   Link
 } from '@mui/material';
 import auth from '../services/auth';
+import studentsApi from '../services/students';
+import { MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 
 function Register() {
   const [formData, setFormData] = useState({
-    username: '',
+    firstName: '',
+    lastName: '',
     email: '',
+    contactNumber: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    rollNumber: '',
+    course: '',
+    track: ''
   });
   
   // Initialize errors state
   const [errors, setErrors] = useState({
-    username: '',
+    firstName: '',
+    lastName: '',
     email: '',
+    contactNumber: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    rollNumber: '',
+    course: '',
+    track: ''
   });
   
   const [apiError, setApiError] = useState('');
@@ -47,14 +59,23 @@ function Register() {
   const validateForm = () => {
     let valid = true;
     const newErrors = {
-      username: '',
+      firstName: '',
+      lastName: '',
       email: '',
+      contactNumber: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      rollNumber: '',
+      course: '',
+      track: ''
     };
 
-    if (!formData.username.trim()) {
-      newErrors.username = 'Username is required';
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = 'First name is required';
+      valid = false;
+    }
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = 'Last name is required';
       valid = false;
     }
 
@@ -92,7 +113,17 @@ function Register() {
     }
 
     try {
-      await auth.register(formData);
+      const payload = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+        contactNumber: formData.contactNumber,
+        rollNumber: formData.rollNumber,
+        course: formData.course,
+        track: formData.course === 'MSc.CS' ? formData.track : null
+      };
+      await studentsApi.register(payload);
       navigate('/login');
     } catch (error) {
       setApiError(error.message || 'Registration failed. Please try again.');
@@ -122,15 +153,28 @@ function Register() {
             margin="normal"
             required
             fullWidth
-            id="username"
-            label="Username"
-            name="username"
-            autoComplete="username"
+            id="firstName"
+            label="First Name"
+            name="firstName"
+            autoComplete="given-name"
             autoFocus
-            value={formData.username}
+            value={formData.firstName}
             onChange={handleChange}
-            error={!!errors.username}
-            helperText={errors.username}
+            error={!!errors.firstName}
+            helperText={errors.firstName}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="lastName"
+            label="Last Name"
+            name="lastName"
+            autoComplete="family-name"
+            value={formData.lastName}
+            onChange={handleChange}
+            error={!!errors.lastName}
+            helperText={errors.lastName}
           />
           
           <TextField
@@ -145,6 +189,18 @@ function Register() {
             onChange={handleChange}
             error={!!errors.email}
             helperText={errors.email}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            id="contactNumber"
+            label="Contact Number"
+            name="contactNumber"
+            autoComplete="tel"
+            value={formData.contactNumber}
+            onChange={handleChange}
+            error={!!errors.contactNumber}
+            helperText={errors.contactNumber}
           />
           
           <TextField
@@ -175,6 +231,49 @@ function Register() {
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword}
           />
+
+          <TextField
+            margin="normal"
+            fullWidth
+            id="rollNumber"
+            label="Roll Number"
+            name="rollNumber"
+            value={formData.rollNumber}
+            onChange={handleChange}
+            error={!!errors.rollNumber}
+            helperText={errors.rollNumber}
+          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="course-label">Course</InputLabel>
+            <Select
+              labelId="course-label"
+              id="course"
+              name="course"
+              value={formData.course}
+              label="Course"
+              onChange={handleChange}
+            >
+              <MenuItem value="MSc.CS">MSc.CS</MenuItem>
+              <MenuItem value="MSc.AIML">MSc.AIML</MenuItem>
+              <MenuItem value="MCA">MCA</MenuItem>
+            </Select>
+          </FormControl>
+          {formData.course === 'MSc.CS' && (
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="track-label">Track</InputLabel>
+              <Select
+                labelId="track-label"
+                id="track"
+                name="track"
+                value={formData.track}
+                label="Track"
+                onChange={handleChange}
+              >
+                <MenuItem value="Web Technologies">Web Technologies</MenuItem>
+                <MenuItem value="AI & ML">AI & ML</MenuItem>
+              </Select>
+            </FormControl>
+          )}
           
           <Button
             type="submit"
