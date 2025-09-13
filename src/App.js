@@ -9,6 +9,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import PrivateRoute from './components/PrivateRoute';
+import EditProfile from './pages/EditProfile';
 
 // Create a theme instance
 const theme = createTheme({
@@ -42,6 +43,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Dashboard />
+              </PrivateRoute>
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              <PrivateRoute>
+                <EditProfile />
               </PrivateRoute>
             } 
           />

@@ -20,6 +20,9 @@ const Navbar = () => {
         </Typography>
         {user ? (
           <>
+            <Button color="inherit" component={Link} to="/profile">
+              Profile
+            </Button>
             {auth.isAdmin() && (
               <Button color="inherit" component={Link} to="/admin">
                 Admin Dashboard
